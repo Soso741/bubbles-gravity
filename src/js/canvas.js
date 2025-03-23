@@ -14,7 +14,7 @@ const mouse = {
 
 const colors = ["#2185C5", "#7ECEFD", "#FFF6E5", "#FF7F66"];
 const gravity = 1;
-const friction = 0.2;
+const friction = 0.99;
 let objects = [];
 let initiateTutorial = false;
 let tutorialDiv = null;
