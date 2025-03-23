@@ -24,6 +24,21 @@ module.exports = {
   distance: distance
 };
 
+/***/ }),
+
+/***/ "./src/public/mouse.gif":
+/*!******************************!*\
+  !*** ./src/public/mouse.gif ***!
+  \******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__webpack_require__.p + "6da52526e0dc925b1c9b3f003cb3da70.gif");
+
 /***/ })
 
 /******/ 	});
@@ -77,6 +92,18 @@ module.exports = {
 /******/ 		};
 /******/ 	})();
 /******/ 	
+/******/ 	/* webpack/runtime/global */
+/******/ 	(() => {
+/******/ 		__webpack_require__.g = (function() {
+/******/ 			if (typeof globalThis === 'object') return globalThis;
+/******/ 			try {
+/******/ 				return this || new Function('return this')();
+/******/ 			} catch (e) {
+/******/ 				if (typeof window === 'object') return window;
+/******/ 			}
+/******/ 		})();
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
 /******/ 	(() => {
 /******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
@@ -93,6 +120,29 @@ module.exports = {
 /******/ 		};
 /******/ 	})();
 /******/ 	
+/******/ 	/* webpack/runtime/publicPath */
+/******/ 	(() => {
+/******/ 		var scriptUrl;
+/******/ 		if (__webpack_require__.g.importScripts) scriptUrl = __webpack_require__.g.location + "";
+/******/ 		var document = __webpack_require__.g.document;
+/******/ 		if (!scriptUrl && document) {
+/******/ 			if (document.currentScript)
+/******/ 				scriptUrl = document.currentScript.src;
+/******/ 			if (!scriptUrl) {
+/******/ 				var scripts = document.getElementsByTagName("script");
+/******/ 				if(scripts.length) {
+/******/ 					var i = scripts.length - 1;
+/******/ 					while (i > -1 && (!scriptUrl || !/^http(s?):/.test(scriptUrl))) scriptUrl = scripts[i--].src;
+/******/ 				}
+/******/ 			}
+/******/ 		}
+/******/ 		// When supporting browsers where an automatic publicPath is not supported you must specify an output.publicPath manually via configuration
+/******/ 		// or pass an empty string ("") and set the __webpack_public_path__ variable from your code to use your own logic.
+/******/ 		if (!scriptUrl) throw new Error("Automatic publicPath is not supported in this browser");
+/******/ 		scriptUrl = scriptUrl.replace(/#.*$/, "").replace(/\?.*$/, "").replace(/\/[^\/]+$/, "/");
+/******/ 		__webpack_require__.p = scriptUrl + "../";
+/******/ 	})();
+/******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
@@ -104,73 +154,135 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils */ "./src/js/utils.js");
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_utils__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _public_mouse_gif__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../public/mouse.gif */ "./src/public/mouse.gif");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var canvas = document.querySelector('canvas');
-var c = canvas.getContext('2d');
+
+var canvas = document.querySelector("canvas");
+var ctx = canvas.getContext("2d");
 canvas.width = innerWidth;
 canvas.height = innerHeight;
 var mouse = {
   x: innerWidth / 2,
   y: innerHeight / 2
 };
-var colors = ['#2185C5', '#7ECEFD', '#FFF6E5', '#FF7F66'];
+var colors = ["#2185C5", "#7ECEFD", "#FFF6E5", "#FF7F66"];
+var gravity = 1;
+var friction = 0.2;
+var objects = [];
+var initiateTutorial = false;
+var tutorialDiv = null;
 
 // Event Listeners
-addEventListener('mousemove', function (event) {
+addEventListener("mousemove", function (event) {
   mouse.x = event.clientX;
   mouse.y = event.clientY;
 });
-addEventListener('resize', function () {
+addEventListener("resize", function () {
   canvas.width = innerWidth;
   canvas.height = innerHeight;
+  if (objects.length < 600) {
+    init();
+  }
+});
+addEventListener("click", function () {
+  objects = [];
   init();
 });
+addEventListener("click", function () {
+  if (tutorialDiv) {
+    tutorialDiv.classList.remove("tutorialActive");
+    setTimeout(function () {
+      tutorialDiv.style.visibility = "hidden"; // Ensures it's unclickable
+    }, 400);
+  }
+});
+function showTutorial() {
+  // Ensure we create it only once ,Prevents duplicate tutorial creation
+  var tutorialText = "<h1 class=\"titleText\">Click on screen to reset</h1>";
+  tutorialDiv = document.createElement("div");
+  var animationCont = document.createElement("div");
+  var mouseGIF = document.createElement("img");
+  tutorialDiv.classList.add("tutorialBg");
+  animationCont.classList.add("animationCont");
+  tutorialDiv.innerHTML = tutorialText;
+  mouseGIF.src = _public_mouse_gif__WEBPACK_IMPORTED_MODULE_1__["default"];
+  mouseGIF.alt = "Mouse clicking tutorial";
+  mouseGIF.classList.add("mouseGIF");
+  document.body.appendChild(tutorialDiv);
+  tutorialDiv.appendChild(animationCont);
+  animationCont.appendChild(mouseGIF);
+  setTimeout(function () {
+    tutorialDiv.classList.add("tutorialActive");
+  }, 500);
+}
 
 // Objects
-var _Object = /*#__PURE__*/function () {
-  function Object(x, y, radius, color) {
-    _classCallCheck(this, Object);
+var Circle = /*#__PURE__*/function () {
+  function Circle(x, y, dx, dy, r, color) {
+    _classCallCheck(this, Circle);
     this.x = x;
     this.y = y;
-    this.radius = radius;
+    this.dx = dx;
+    this.dy = dy;
+    this.r = r;
     this.color = color;
   }
-  _createClass(Object, [{
+  _createClass(Circle, [{
     key: "draw",
     value: function draw() {
-      c.beginPath();
-      c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-      c.fillStyle = this.color;
-      c.fill();
-      c.closePath();
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2, false);
+      ctx.fillStyle = this.color;
+      ctx.stroke();
+      ctx.fill();
+      ctx.closePath();
     }
   }, {
     key: "update",
     value: function update() {
-      this.draw();
+      //this.y + this.r >= screenHeight
+      if (this.y + this.r + this.dy >= innerHeight || this.y - this.r <= 0) {
+        this.dy = -this.dy * friction;
+        this.dx *= friction;
+        if (Math.abs(this.dy) < 0.5) this.dy = 0;
+        if (Math.abs(this.dx) < 0.5) this.dx = 0;
+      } else {
+        this.dy += gravity;
+      }
+      if (this.x + this.r + this.dx >= innerWidth || this.x - this.r < 0) {
+        this.dx = -this.dx;
+        this.dy = this.dy * friction;
+      }
+      this.x += this.dx;
+      this.y += this.dy;
     }
   }]);
-  return Object;
+  return Circle;
 }(); // Implementation
-var objects;
 function init() {
-  objects = [];
-  for (var i = 0; i < 400; i++) {
-    // objects.push()
+  for (var i = 0; i < 500; i++) {
+    var randRadius = (0,_utils__WEBPACK_IMPORTED_MODULE_0__.randomIntFromRange)(10, 30);
+    objects.push(new Circle((0,_utils__WEBPACK_IMPORTED_MODULE_0__.randomIntFromRange)(randRadius, innerWidth - randRadius), (0,_utils__WEBPACK_IMPORTED_MODULE_0__.randomIntFromRange)(randRadius * 2, innerHeight - randRadius), (0,_utils__WEBPACK_IMPORTED_MODULE_0__.randomIntFromRange)(1, 5), (0,_utils__WEBPACK_IMPORTED_MODULE_0__.randomIntFromRange)(-3, 3), randRadius, (0,_utils__WEBPACK_IMPORTED_MODULE_0__.randomColor)(colors)));
   }
 }
 
 // Animation Loop
 function animate() {
   requestAnimationFrame(animate);
-  c.clearRect(0, 0, canvas.width, canvas.height);
-  c.fillText('HTML CANVAS BOILERPLATE', mouse.x, mouse.y);
-  // objects.forEach(object => {
-  //  object.update()
-  // })
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  objects.forEach(function (elm) {
+    elm.draw();
+    elm.update();
+    if (!objects.some(function (circle) {
+      return circle.dy;
+    }) > 0 && !initiateTutorial) {
+      initiateTutorial = true;
+      showTutorial();
+    }
+  });
 }
 init();
 animate();
