@@ -118,13 +118,13 @@ class Circle {
 // Implementation
 function init() {
   for (let i = 0; i < 500; i++) {
-    const randRadius = randomIntFromRange(10, 30);
+    const randRadius = randomIntFromRange(8, 40);
     objects.push(
       new Circle(
         randomIntFromRange(randRadius, innerWidth - randRadius),
         randomIntFromRange(randRadius * 2, innerHeight - randRadius),
-        randomIntFromRange(1, 5),
-        randomIntFromRange(-3, 3),
+        randomIntFromRange(-5, 5),
+        randomIntFromRange(-5, 5),
         randRadius,
         randomColor(colors)
       )
