@@ -37,7 +37,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__webpack_require__.p + "6da52526e0dc925b1c9b3f003cb3da70.gif");
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__webpack_require__.p + "images/images/mouse.gif");
 
 /***/ })
 
@@ -170,7 +170,7 @@ var mouse = {
 };
 var colors = ["#2185C5", "#7ECEFD", "#FFF6E5", "#FF7F66"];
 var gravity = 1;
-var friction = 0.2;
+var friction = 0.99;
 var objects = [];
 var initiateTutorial = false;
 var tutorialDiv = null;
@@ -264,8 +264,8 @@ var Circle = /*#__PURE__*/function () {
 }(); // Implementation
 function init() {
   for (var i = 0; i < 500; i++) {
-    var randRadius = (0,_utils__WEBPACK_IMPORTED_MODULE_0__.randomIntFromRange)(10, 30);
-    objects.push(new Circle((0,_utils__WEBPACK_IMPORTED_MODULE_0__.randomIntFromRange)(randRadius, innerWidth - randRadius), (0,_utils__WEBPACK_IMPORTED_MODULE_0__.randomIntFromRange)(randRadius * 2, innerHeight - randRadius), (0,_utils__WEBPACK_IMPORTED_MODULE_0__.randomIntFromRange)(1, 5), (0,_utils__WEBPACK_IMPORTED_MODULE_0__.randomIntFromRange)(-3, 3), randRadius, (0,_utils__WEBPACK_IMPORTED_MODULE_0__.randomColor)(colors)));
+    var randRadius = (0,_utils__WEBPACK_IMPORTED_MODULE_0__.randomIntFromRange)(8, 40);
+    objects.push(new Circle((0,_utils__WEBPACK_IMPORTED_MODULE_0__.randomIntFromRange)(randRadius, innerWidth - randRadius), (0,_utils__WEBPACK_IMPORTED_MODULE_0__.randomIntFromRange)(randRadius * 2, innerHeight - randRadius), (0,_utils__WEBPACK_IMPORTED_MODULE_0__.randomIntFromRange)(-5, 5), (0,_utils__WEBPACK_IMPORTED_MODULE_0__.randomIntFromRange)(-5, 5), randRadius, (0,_utils__WEBPACK_IMPORTED_MODULE_0__.randomColor)(colors)));
   }
 }
 

@@ -1,3 +1,4 @@
+const path = require("path");
 const BrowserSyncPlugin = require("browser-sync-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
@@ -5,14 +6,14 @@ module.exports = {
   mode: "development",
   entry: "./src/js/canvas.js",
   output: {
-    path: __dirname + "/dist/",
-    filename: "./js/canvas.bundle.js",
+    path: path.resolve(__dirname, "dist"),
+    filename: "js/canvas.bundle.js",
   },
   module: {
     rules: [
       {
         test: /\.m?js$/,
-        exclude: /(node_modules|bower_components)/,
+        exclude: /node_modules/,
         use: {
           loader: "babel-loader",
           options: {
@@ -26,18 +27,9 @@ module.exports = {
           {
             loader: "file-loader",
             options: {
-              name: "[name].[hash].[ext]",
-              outputPath: "assets",
-              publicPath: "assets",
+              name: "images/[name].[ext]", // Puts images inside "dist/images/"
+              outputPath: "images", // Copies images to "dist/images/"
             },
-          },
-        ],
-      },
-      {
-        test: /\.(png|jpe?g|gif)$/i,
-        use: [
-          {
-            loader: "file-loader",
           },
         ],
       },
@@ -53,7 +45,6 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       filename: "index.html",
-      favicon: "favicon.ico",
       template: "src/index.html",
     }),
   ],
